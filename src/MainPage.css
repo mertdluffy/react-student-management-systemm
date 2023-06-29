@@ -1,0 +1,251 @@
+/* MainPage.css */
+
+/* Add a media query for screens with a maximum width of 768px */
+@media (max-width: 768px) {
+    .user-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .user-table thead,
+    .user-table tbody,
+    .user-table tr,
+    .user-table th,
+    .user-table td {
+        display: block;
+    }
+
+    .user-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    .user-table tbody tr {
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 10px;
+    }
+
+    .user-table td {
+        border: none;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    .user-table td:before {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: bold;
+    }
+
+    .user-table td:nth-of-type(1):before {
+        content: "Name";
+    }
+
+    .user-table td:nth-of-type(2):before {
+        content: "Email";
+    }
+
+    .user-table td:nth-of-type(3):before {
+        content: "Phone";
+    }
+
+    .user-table td:nth-of-type(4):before {
+        content: "Actions";
+    }
+
+    .update-button,
+    .delete-button {
+        margin-bottom: 10px;
+    }
+}
+
+.main-page-container {
+    padding: 20px;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.toolbar {
+    margin-bottom: 20px;
+}
+
+.create-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4285f4;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.create-popup {
+    width: 400px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.create-popup h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+.update-popup {
+    width: 400px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.update-popup h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.popup-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.cancel-button,
+.create-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.update-button {
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #4285f4;
+    color: #fff;
+}
+.delete-button {
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: red;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+.cancel-button {
+    margin-right: 10px;
+    background-color: #ccc;
+}
+
+.create-button {
+    background-color: #4285f4;
+    color: #fff;
+}
+
+.user-table-container {
+    text-align: center;
+    padding: 20px;
+    background-color: #212121;
+    color: #fff;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.user-table th,
+.user-table td {
+    padding: 10px;
+    border: 1px solid #424242;
+}
+
+.user-table th {
+    background-color: #424242;
+    font-weight: bold;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.pagination button {
+    padding: 8px 16px;
+    margin: 0 5px;
+    background-color: #424242;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+.pagination button.active {
+    background-color: #757575;
+}
+
+.users-per-page {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.users-per-page label {
+    font-weight: bold;
+    color: #fff;
+    margin-right: 5px;
+}
+
+.users-per-page select {
+    padding: 5px;
+}
+
+.page-selection {
+    margin-top: 10px;
+}

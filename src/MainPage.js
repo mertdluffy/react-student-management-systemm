@@ -1,19 +1,26 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './MainPage.css';
 
 const MainPage = () => {
     const [users, setUsers] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
     const [usersPerPage, setUsersPerPage] = useState(10);
-    const [searchQuery, setSearchQuery] = useState('');
     const [isCreatePopupOpen, setIsCreatePopupOpen] = useState(false);
-    const [selectedUser, setSelectedUser] = useState([]);
+    const [selectedUser, setSelectedUser] = useState(null);
     const [newUser, setNewUser] = useState({
         firstName: '',
         lastName: '',
         email: '',
         phone: ''
     });
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const queryParams = new URLSearchParams(location.search);
+    const queryPage = queryParams.get('page');
+    const querySearchQuery = queryParams.get('searchQuery');
+    const [currentPage, setCurrentPage] = useState(queryPage ? Number(queryPage) : 1);
+    const [searchQuery, setSearchQuery] = useState(querySearchQuery || '');
 
     useEffect(() => {
         fetch('https://dummyjson.com/users')
@@ -29,11 +36,18 @@ const MainPage = () => {
                 console.log('Error fetching data:', error);
             });
     }, []);
+    
+useEffect(() => {
+        const newParams = new URLSearchParams();
+        newParams.set('page', currentPage);
+        newParams.set('searchQuery', searchQuery);
+        navigate(`?${newParams.toString()}`);
+    }, [currentPage, searchQuery, navigate]);
 
     // Pagination logic and filtering based on search query
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    var currentUsers = users
+    const currentUsers = users
         .filter(user => user.firstName.toLowerCase().includes(searchQuery.toLowerCase()))
         .slice(indexOfFirstUser, indexOfLastUser);
 
@@ -95,6 +109,7 @@ const MainPage = () => {
 
     // Update user
     const handleUpdateUser = (user) => {
+        console.log(currentUsers[0])
         setSelectedUser(user);
     };
 
@@ -104,11 +119,11 @@ const MainPage = () => {
             method: 'DELETE',
         })
             .then(res => res.json())
-            .then(console.log);
         const updatedUsers = users.filter((u) => u.id !== user.id);
 
         setUsers(updatedUsers);
-        // Perform any other desired action (e.g., make an API call to delete the user)
+        console.log(users)
+
     };
 
     // Handle input change in update popup form
@@ -119,7 +134,6 @@ const MainPage = () => {
 
 // Close update popup
     const closeUpdatePopup = () => {
-        console.log(selectedUser)
         setSelectedUser(null);
     };
 
@@ -134,12 +148,12 @@ const MainPage = () => {
         })
             .then(res => res.json())
             .then((data) => {
-                var objIndex = users.findIndex((user_to_be_edited => user_to_be_edited.id === selectedUser.id));
-                users[objIndex] = selectedUser
-                setUsers(users)
-                currentUsers = users
-                    .filter(user => user.firstName.toLowerCase().includes(searchQuery.toLowerCase()))
-                    .slice(indexOfFirstUser, indexOfLastUser);
+                const updatedUsers = users;
+                var objIndex = updatedUsers.findIndex((user_to_be_edited => user_to_be_edited.id === selectedUser.id));
+                updatedUsers[objIndex] = selectedUser
+                console.log(updatedUsers[objIndex])
+                setUsers(updatedUsers)
+                console.log(currentUsers[0])
             });
         closeUpdatePopup();
     };

@@ -7,62 +7,6 @@
         overflow-x: auto;
         white-space: nowrap;
     }
-
-    .user-table thead,
-    .user-table tbody,
-    .user-table tr,
-    .user-table th,
-    .user-table td {
-        display: block;
-    }
-
-    .user-table thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-    }
-
-    .user-table tbody tr {
-        border-bottom: 1px solid #ccc;
-        margin-bottom: 10px;
-    }
-
-    .user-table td {
-        border: none;
-        position: relative;
-        padding-left: 50%;
-    }
-
-    .user-table td:before {
-        position: absolute;
-        top: 6px;
-        left: 6px;
-        width: 45%;
-        padding-right: 10px;
-        white-space: nowrap;
-        font-weight: bold;
-    }
-
-    .user-table td:nth-of-type(1):before {
-        content: "Name";
-    }
-
-    .user-table td:nth-of-type(2):before {
-        content: "Email";
-    }
-
-    .user-table td:nth-of-type(3):before {
-        content: "Phone";
-    }
-
-    .user-table td:nth-of-type(4):before {
-        content: "Actions";
-    }
-
-    .update-button,
-    .delete-button {
-        margin-bottom: 10px;
-    }
 }
 
 .main-page-container {

@@ -22,16 +22,6 @@ h2 {
     margin-bottom: 20px;
 }
 
-.create-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #4285f4;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
 .popup-overlay {
     position: fixed;
     top: 0;
@@ -43,7 +33,6 @@ h2 {
     justify-content: center;
     align-items: center;
 }
-
 .create-popup {
     width: 400px;
     padding: 20px;
@@ -94,6 +83,9 @@ h2 {
 
 .cancel-button,
 .create-button {
+    width: 100%;
+    background-color: #4285f4;
+    color: #fff;
     padding: 10px 20px;
     font-size: 16px;
     border: none;
@@ -123,10 +115,35 @@ h2 {
     margin-right: 10px;
     background-color: #ccc;
 }
+.search-container {
+    height: 20px;
+    display: flex;
+    align-items: center;
+}
 
-.create-button {
-    background-color: #4285f4;
+.search-input {
+    height: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    width: 250px;
+}
+
+.search-button {
+    height: 100%;
+    padding: 10px 20px;
+    background-color: #4caf50;
     color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.search-button:hover {
+    background-color: #45a049;
 }
 
 .user-table-container {
@@ -152,10 +169,16 @@ h2 {
     background-color: #424242;
     font-weight: bold;
 }
-
-.pagination {
+.user-table-footer{
     display: flex;
     justify-content: center;
+    margin-top: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.pagination {
+    display: flex;
+    justify-content: space-evenly;
     margin-top: 20px;
     align-items: center;
     flex-wrap: wrap;

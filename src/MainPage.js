@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './MainPage.css';
+import Layout from "./Layout";
 
 const MainPage = () => {
-    const [users, setUsers] = useState([]);
-    const [usersPerPage, setUsersPerPage] = useState(10);
+    const [students, setStudents] = useState([]);
+    const [studentsPerPage, setStudentsPerPage] = useState(10);
     const [isCreatePopupOpen, setIsCreatePopupOpen] = useState(false);
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [newUser, setNewUser] = useState({
+    const [selectedStudent, setSelectedStudent] = useState(null);
+    const [newStudent, setNewStudent] = useState({
         firstName: '',
         lastName: '',
         email: '',
@@ -27,7 +28,7 @@ const MainPage = () => {
             .then((response) => response.json())
             .then((data) => {
                 if (data && Array.isArray(data.users)) {
-                    setUsers(data.users);
+                    setStudents(data.users);
                 } else {
                     console.log('Invalid API response:', data);
                 }
@@ -36,7 +37,7 @@ const MainPage = () => {
                 console.log('Error fetching data:', error);
             });
     }, []);
-    
+
 useEffect(() => {
         const newParams = new URLSearchParams();
         newParams.set('page', currentPage);
@@ -45,11 +46,11 @@ useEffect(() => {
     }, [currentPage, searchQuery, navigate]);
 
     // Pagination logic and filtering based on search query
-    const indexOfLastUser = currentPage * usersPerPage;
-    const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    const currentUsers = users
-        .filter(user => user.firstName.toLowerCase().includes(searchQuery.toLowerCase()))
-        .slice(indexOfFirstUser, indexOfLastUser);
+    const indexOfLastStudent = currentPage * studentsPerPage;
+    const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
+    const currentStudents = students
+        .filter(student => student.firstName.toLowerCase().includes(searchQuery.toLowerCase()))
+        .slice(indexOfFirstStudent, indexOfLastStudent);
 
 
     // Change page
@@ -57,9 +58,9 @@ useEffect(() => {
         setCurrentPage(pageNumber);
     };
 
-    // Change users per page
-    const handleUsersPerPageChange = (event) => {
-        setUsersPerPage(parseInt(event.target.value));
+    // Change students per page
+    const handleStudentsPerPageChange = (event) => {
+        setStudentsPerPage(parseInt(event.target.value));
         setCurrentPage(1);
     };
 
@@ -69,18 +70,18 @@ useEffect(() => {
         setCurrentPage(1);
     };
 
-    // Create new user
-    const handleCreateUser = () => {
-        var updatedUsers;
+    // Create new student
+    const handleCreateStudent = () => {
+        var updatedStudents;
         fetch('https://dummyjson.com/users/add', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newUser)
+            body: JSON.stringify(newStudent)
         })
             .then(res => res.json())
             .then((data) => {
-                updatedUsers = [...users, JSON.parse(JSON.stringify(data))];
-                setUsers(updatedUsers);
+                updatedStudents = [...students, JSON.parse(JSON.stringify(data))];
+                setStudents(updatedStudents);
             });
         closeCreatePopup();
     };
@@ -93,7 +94,7 @@ useEffect(() => {
     // Close create popup
     const closeCreatePopup = () => {
         setIsCreatePopupOpen(false);
-        setNewUser({
+        setNewStudent({
             firstName: '',
             lastName: '',
             email: '',
@@ -104,56 +105,56 @@ useEffect(() => {
     // Handle input change in create popup form
     const handleCreateInputChange = (event) => {
         const { name, value } = event.target;
-        setNewUser((prevUser) => ({ ...prevUser, [name]: value }));
+        setNewStudent((prevStudent) => ({ ...prevStudent, [name]: value }));
     };
 
-    // Update user
-    const handleUpdateUser = (user) => {
-        console.log(currentUsers[0])
-        setSelectedUser(user);
+    // Update student
+    const handleUpdateStudent = (student) => {
+        console.log(currentStudents[0])
+        setSelectedStudent(student);
     };
 
-// Delete user
-    const handleDeleteUser = (user) => {
-        fetch('https://dummyjson.com/users/'+user.id, {
+// Delete student
+    const handleDeleteStudent = (student) => {
+        fetch('https://dummyjson.com/users/'+student.id, {
             method: 'DELETE',
         })
             .then(res => res.json())
-        const updatedUsers = users.filter((u) => u.id !== user.id);
+        const updatedStudents = students.filter((u) => u.id !== student.id);
 
-        setUsers(updatedUsers);
-        console.log(users)
+        setStudents(updatedStudents);
+        console.log(students)
 
     };
 
     // Handle input change in update popup form
     const handleUpdateInputChange = (event) => {
         const { name, value } = event.target;
-        setSelectedUser((prevUser) => ({ ...prevUser, [name]: value }));
+        setSelectedStudent((prevStudent) => ({ ...prevStudent, [name]: value }));
     };
 
 // Close update popup
     const closeUpdatePopup = () => {
-        setSelectedUser(null);
+        setSelectedStudent(null);
     };
 
 // Handle update button click
     const handleUpdate = () => {
-        fetch('https://dummyjson.com/users/'+selectedUser.id, {
+        fetch('https://dummyjson.com/users/'+selectedStudent.id, {
             method: 'PUT', /* or PATCH */
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                selectedUser
+                selectedStudent
             })
         })
             .then(res => res.json())
             .then((data) => {
-                const updatedUsers = users;
-                var objIndex = updatedUsers.findIndex((user_to_be_edited => user_to_be_edited.id === selectedUser.id));
-                updatedUsers[objIndex] = selectedUser
-                console.log(updatedUsers[objIndex])
-                setUsers(updatedUsers)
-                console.log(currentUsers[0])
+                const updatedStudents = students;
+                var objIndex = updatedStudents.findIndex((student_to_be_edited => student_to_be_edited.id === selectedStudent.id));
+                updatedStudents[objIndex] = selectedStudent
+                console.log(updatedStudents[objIndex])
+                setStudents(updatedStudents)
+                console.log(currentStudents[0])
             });
         closeUpdatePopup();
     };
@@ -161,179 +162,180 @@ useEffect(() => {
 
 
     return (
-        <div className="main-page-container">
-            <h2>Student Management System</h2>
-            <div className="toolbar">
-                <button className="create-button" onClick={openCreatePopup}>
-                    Create New Student
-                </button>
-            </div>
-
-            <div className="user-table-container">
-                <h2>User Table</h2>
-                <div className="pagination">
-                    <div className="search-container">
-                        <input type="text" placeholder="Search by name" value={searchQuery} onChange={handleSearch} />
-                    </div>
-                    <div className="users-per-page">
-                        <label>Users Per Page:</label>
-                        <select value={usersPerPage} onChange={handleUsersPerPageChange}>
-                            <option value="5">5</option>
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                        </select>
-                    </div>
-                    <div className="page-selection">
-                        {Array.from({ length: Math.ceil(users.length / usersPerPage) }, (_, index) => (
-                            <button
-                                key={index}
-                                className={currentPage === index + 1 ? 'active' : ''}
-                                onClick={() => paginate(index + 1)}
-                            >
-                                {index + 1}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-                <table className="user-table">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {currentUsers.map((user) => (
-                        <tr key={user.id}>
-                            <td>{user.id}</td>
-                            <td>{user.firstName}</td>
-                            <td>{user.lastName}</td>
-                            <td>{user.email}</td>
-                            <td>{user.phone}</td>
-                            <td>
-                                <button className="update-button" onClick={() => handleUpdateUser(user)}>
-                                    Update
+        <Layout>
+            <div className="main-page-container">
+                <div className="user-table-container">
+                    <h2>Student Table</h2>
+                    <div className="pagination">
+                        <div className="search-container">
+                            <input className="search-input" type="text" placeholder="Search by name" value={searchQuery} onChange={handleSearch} />
+                        </div>
+                        <div className="users-per-page">
+                            <label>Students Per Page:</label>
+                            <select value={studentsPerPage} onChange={handleStudentsPerPageChange}>
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                            </select>
+                        </div>
+                        <div className="page-selection">
+                            {Array.from({ length: Math.ceil(students.length / studentsPerPage) }, (_, index) => (
+                                <button
+                                    key={index}
+                                    className={currentPage === index + 1 ? 'active' : ''}
+                                    onClick={() => paginate(index + 1)}
+                                >
+                                    {index + 1}
                                 </button>
-                                <button className="delete-button" onClick={() => handleDeleteUser(user)}>
-                                    Delete
-                                </button>
-                            </td>
+                            ))}
+                        </div>
+                    </div>
+                    <table className="user-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Actions</th>
                         </tr>
-                    ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {currentStudents.map((student) => (
+                            <tr key={student.id}>
+                                <td>{student.id}</td>
+                                <td>{student.firstName}</td>
+                                <td>{student.lastName}</td>
+                                <td>{student.email}</td>
+                                <td>{student.phone}</td>
+                                <td>
+                                    <button className="update-button" onClick={() => handleUpdateStudent(student)}>
+                                        Update
+                                    </button>
+                                    <button className="delete-button" onClick={() => handleDeleteStudent(student)}>
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                        <tfoot class="user-table-footer">
+                        <p>asd</p>
+                            <button className="create-button" onClick={openCreatePopup}>
+                                Create New Student
+                            </button>
+                        </tfoot>
+                    </table>
+                </div>
+                {isCreatePopupOpen && (
+                    <div className="popup-overlay">
+                        <div className="create-popup">
+                            <h3>Create New Student</h3>
+                            <form>
+                                <div className="form-group">
+                                    <label>First Name:</label>
+                                    <input
+                                        type="text"
+                                        name="firstName"
+                                        value={newStudent.firstName}
+                                        onChange={handleCreateInputChange}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Last Name:</label>
+                                    <input
+                                        type="text"
+                                        name="lastName"
+                                        value={newStudent.lastName}
+                                        onChange={handleCreateInputChange}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Email:</label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={newStudent.email}
+                                        onChange={handleCreateInputChange}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Phone:</label>
+                                    <input
+                                        type="text"
+                                        name="phone"
+                                        value={newStudent.phone}
+                                        onChange={handleCreateInputChange}
+                                    />
+                                </div>
+                                <div className="popup-buttons">
+                                    <button className="cancel-button" onClick={closeCreatePopup}>
+                                        Cancel
+                                    </button>
+                                    <button className="create-button" onClick={handleCreateStudent}>
+                                        Create
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
+                {selectedStudent && (
+                    <div className="popup-overlay">
+                        <div className="update-popup">
+                            <h3>Update Student</h3>
+                            <form>
+                                <div className="form-group">
+                                    <label>First Name:</label>
+                                    <input
+                                        type="text"
+                                        name="firstName"
+                                        value={selectedStudent.firstName}
+                                        onChange={handleUpdateInputChange}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Last Name:</label>
+                                    <input
+                                        type="text"
+                                        name="lastName"
+                                        value={selectedStudent.lastName}
+                                        onChange={handleUpdateInputChange}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Email:</label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={selectedStudent.email}
+                                        onChange={handleUpdateInputChange}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Phone:</label>
+                                    <input
+                                        type="text"
+                                        name="phone"
+                                        value={selectedStudent.phone}
+                                        onChange={handleUpdateInputChange}
+                                    />
+                                </div>
+                                <div className="popup-buttons">
+                                    <button className="cancel-button" onClick={closeUpdatePopup}>
+                                        Cancel
+                                    </button>
+                                    <button className="update-button" onClick={handleUpdate}>
+                                        Update
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
             </div>
-            {isCreatePopupOpen && (
-                <div className="popup-overlay">
-                    <div className="create-popup">
-                        <h3>Create New Student</h3>
-                        <form>
-                            <div className="form-group">
-                                <label>First Name:</label>
-                                <input
-                                    type="text"
-                                    name="firstName"
-                                    value={newUser.firstName}
-                                    onChange={handleCreateInputChange}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Last Name:</label>
-                                <input
-                                    type="text"
-                                    name="lastName"
-                                    value={newUser.lastName}
-                                    onChange={handleCreateInputChange}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Email:</label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={newUser.email}
-                                    onChange={handleCreateInputChange}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Phone:</label>
-                                <input
-                                    type="text"
-                                    name="phone"
-                                    value={newUser.phone}
-                                    onChange={handleCreateInputChange}
-                                />
-                            </div>
-                            <div className="popup-buttons">
-                                <button className="cancel-button" onClick={closeCreatePopup}>
-                                    Cancel
-                                </button>
-                                <button className="create-button" onClick={handleCreateUser}>
-                                    Create
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-            {selectedUser && (
-                <div className="popup-overlay">
-                    <div className="update-popup">
-                        <h3>Update User</h3>
-                        <form>
-                            <div className="form-group">
-                                <label>First Name:</label>
-                                <input
-                                    type="text"
-                                    name="firstName"
-                                    value={selectedUser.firstName}
-                                    onChange={handleUpdateInputChange}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Last Name:</label>
-                                <input
-                                    type="text"
-                                    name="lastName"
-                                    value={selectedUser.lastName}
-                                    onChange={handleUpdateInputChange}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Email:</label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={selectedUser.email}
-                                    onChange={handleUpdateInputChange}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Phone:</label>
-                                <input
-                                    type="text"
-                                    name="phone"
-                                    value={selectedUser.phone}
-                                    onChange={handleUpdateInputChange}
-                                />
-                            </div>
-                            <div className="popup-buttons">
-                                <button className="cancel-button" onClick={closeUpdatePopup}>
-                                    Cancel
-                                </button>
-                                <button className="update-button" onClick={handleUpdate}>
-                                    Update
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-        </div>
+        </Layout>
     );
 };
 

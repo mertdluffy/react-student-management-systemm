@@ -130,22 +130,6 @@ h2 {
     width: 250px;
 }
 
-.search-button {
-    height: 100%;
-    padding: 10px 20px;
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-left: 10px;
-}
-
-.search-button:hover {
-    background-color: #45a049;
-}
-
 .user-table-container {
     text-align: center;
     padding: 20px;

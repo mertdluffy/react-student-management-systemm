@@ -110,7 +110,6 @@ useEffect(() => {
 
     // Update student
     const handleUpdateStudent = (student) => {
-        console.log(currentStudents[0])
         setSelectedStudent(student);
     };
 
@@ -123,7 +122,6 @@ useEffect(() => {
         const updatedStudents = students.filter((u) => u.id !== student.id);
 
         setStudents(updatedStudents);
-        console.log(students)
 
     };
 
@@ -140,22 +138,23 @@ useEffect(() => {
 
 // Handle update button click
     const handleUpdate = () => {
-        fetch('https://dummyjson.com/users/'+selectedStudent.id, {
+        fetch(`https://dummyjson.com/users/${selectedStudent.id}`, {
             method: 'PUT', /* or PATCH */
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                selectedStudent
-            })
+            body: JSON.stringify(selectedStudent)
         })
             .then(res => res.json())
-            .then((data) => {
-                const updatedStudents = students;
-                var objIndex = updatedStudents.findIndex((student_to_be_edited => student_to_be_edited.id === selectedStudent.id));
-                updatedStudents[objIndex] = selectedStudent
-                console.log(updatedStudents[objIndex])
-                setStudents(updatedStudents)
-                console.log(currentStudents[0])
+            .then(updatedStudent => {
+                // Update the users state with the updated user
+                const updatedStudents = students.map(student =>
+                    student.id === updatedStudent.id ? updatedStudent : student
+                );
+                setStudents(updatedStudents);
+            })
+            .catch(error => {
+                console.log('Error updating user:', error);
             });
+
         closeUpdatePopup();
     };
 
@@ -221,7 +220,6 @@ useEffect(() => {
                         ))}
                         </tbody>
                         <tfoot class="user-table-footer">
-                        <p>asd</p>
                             <button className="create-button" onClick={openCreatePopup}>
                                 Create New Student
                             </button>
